@@ -108,14 +108,9 @@ router.post('/asanLogin', (req, res) => {
         { pin: '3V1NNMM', fullName: 'ƏKBƏROVA TAHİRƏ ƏLİMƏRDAN QIZI', password: 'Agro2020!!'}
     ];
 
-    const user = {
-        fullName: 'Sona Mehralizada',
-        birthday: '10.01.1998',
-        phone: '051-340-92-77',
-        address: 'Lorem ipsum'
-    };
+    const user = userDataList.find(userData => userData.pin === pin && userData.password === password);
 
-    if (userDataList.some(userData => userData.pin === pin && userData.password === password)) {
+    if (user) {
         const tokenPayload = {
             pin: user.pin,
             fullName: user.fullName
@@ -128,6 +123,7 @@ router.post('/asanLogin', (req, res) => {
         const newSpecificToken = jwt.sign(tokenPayload, secretKey, tokenOptions);
         const decodedToken = jwt.decode(newSpecificToken);
 
+        user.password = null
         res.json({
             status: 200,
             message: "Login successful",
